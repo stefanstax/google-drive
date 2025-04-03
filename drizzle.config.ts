@@ -1,12 +1,17 @@
-import { type Config } from "drizzle-kit";
+import { defineConfig } from "drizzle-kit";
 
-import { env } from "~/env";
-
-export default {
+export default defineConfig({
+  dialect: "singlestore",
+  out: "./src/drizzle",
   schema: "./src/server/db/schema.ts",
-  dialect: "sqlite",
   dbCredentials: {
-    url: env.DATABASE_URL,
+    host: process.env.SINGLESTORE_HOST ?? "",
+    port: Number(process.env.SINGLESTORE_PORT ?? 0),
+    user: process.env.SINGLESTORE_USER ?? "",
+    password: process.env.SINGLESTORE_PASS ?? "",
+    database: process.env.SINGLESTORE_DB_NAME ?? "",
+    ssl: {},
   },
-  tablesFilter: ["google-drive_*"],
-} satisfies Config;
+  verbose: true,
+  strict: true,
+});
